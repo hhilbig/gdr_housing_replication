@@ -38,12 +38,9 @@ To replicate the analyses:
 2. You may need to install necessary R packages. Check the `pacman::p_load()` calls at the beginning of each R script for required packages (e.g., `tidyverse`, `fixest`, `sf`). Note that `pacman::P_load()` will install packages if they are not yet installed.
 3. Set the working directory to the root of this repository in your R session.
 4. Run the R scripts located in the `/code` directory. A recommended order is:
-  
-   a. Run the main estimation scripts: `results_2wfe.R` and `results_lag_lead.R`. These generate `.rds` files in `/results`. Note that `results_lag_lead.R` requires first loading some helper functions in `functions.R`, which is
-
-   b. Run the figure/table scripts that depend on the `/results` files (`figure_2_A10_A12_A13.R`, `table_2_A2.R`, `figure_A9.R`).
-
-   c. Other figure/table scripts can generally be run independently after step (a), as they load data directly from `/data`.
+   * Run the main estimation scripts: `results_2wfe.R` and `results_lag_lead.R`. These generate `.rds` files in `/results`. Note that `results_lag_lead.R` requires first loading some helper functions in `functions.R`, which is
+   * Run the figure/table scripts that depend on the `/results` files (`figure_2_A10_A12_A13.R`, `table_2_A2.R`, `figure_A9.R`).
+   * Other figure/table scripts can generally be run independently after step (a), as they load data directly from `/data`.
 
 Note: The specific workflow is: Estimation scripts (`results_*.R`) save model objects to `/results`. Dependent figure/table scripts load these objects. Other scripts are self-contained (load from `/data`, analyze, output).
 

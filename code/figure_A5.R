@@ -4,7 +4,7 @@ rm(list = ls())
 # Load packages
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
 
-pacman::p_load(dplyr, readr, ggplot2, ggpubr, tidyr, janitor)
+pacman::p_load(dplyr, readr, ggplot2, ggpubr, tidyr, janitor, conflicted)
 
 
 ## Get data and prepare variables
@@ -17,7 +17,7 @@ df <- read_rds("data/data_main.rds") %>%
 ## Identify years with sufficient petition data
 pet_years <- df %>%
   group_by(year) %>%
-  summarise(nobs = sum(!is.na(petitions_housing_pc)), .groups = "drop") %>% # Added .groups = 'drop'
+  summarise(nobs = sum(!is.na(petitions_housing_pc)), .groups = "drop") %>%
   filter(nobs > 100) %>%
   pull(year)
 
@@ -32,11 +32,11 @@ p1 <- ggplot(
   geom_point(
     shape = 21,
     size = .8,
-    alpha = 0.6 # Added slight transparency
+    alpha = 0.6
   ) +
   geom_smooth(
     method = "lm",
-    se = FALSE, # Changed to FALSE
+    se = FALSE,
     col = "black",
     size = .5,
     formula = y ~ x # Explicitly set formula for clarity
@@ -47,12 +47,12 @@ p1 <- ggplot(
     scales = "free"
   ) +
   labs(
-    title = "Housing Petitions vs. Construction by Year", # Added title
+    title = "Housing Petitions vs. Construction by Year",
     x = "Housing petitions (per 1,000 capita)",
     y = "Housing construction (per 1,000 capita)"
   ) +
   ggpubr::stat_cor(
-    aes(label = after_stat(r.label)), # Updated label aesthetic for newer ggplot2/ggpubr
+    aes(label = after_stat(r.label)),
     cor.coef.name = "r",
     label.x.npc = 0.05, # Position correlation label
     label.y.npc = 0.95, # Position correlation label

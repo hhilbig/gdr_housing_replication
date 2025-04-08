@@ -3,7 +3,7 @@ rm(list = ls())
 
 # Load packages
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
-pacman::p_load(dplyr, readr, sf, ggrepel, stringr, units)
+pacman::p_load(dplyr, readr, sf, ggrepel, stringr, units, conflicted)
 
 # Resolve conflicts if needed
 conflicts_prefer(dplyr::filter)
@@ -15,18 +15,18 @@ theme_map <- function(...) {
   theme_minimal() +
     theme(
       axis.line = element_blank(),
-      axis.text = element_blank(), # Simplified: remove both x and y text
+      axis.text = element_blank(),
       axis.ticks = element_blank(),
-      axis.title = element_blank(), # Simplified: remove both x and y titles
-      panel.grid.major = element_line(color = "grey90", size = 0.2), # Adjusted color slightly
+      axis.title = element_blank(),
+      panel.grid.major = element_line(color = "grey90", size = 0.2),
       panel.grid.minor = element_blank(),
       plot.background = element_rect(fill = "white", color = NA),
       panel.background = element_rect(fill = "white", color = NA),
       legend.background = element_rect(fill = "white", color = NA),
       panel.border = element_blank(),
       legend.position = "bottom", # Default legend position
-      legend.text = element_text(size = 10), # Adjusted default legend text size
-      legend.title = element_text(size = 11), # Added legend title size
+      legend.text = element_text(size = 10),
+      legend.title = element_text(size = 11),
       ...
     )
 }
@@ -38,8 +38,6 @@ theme_map <- function(...) {
 df_full <- read_rds("data/data_main.rds")
 
 # Calculate average petitions (1963-1971, per 1000 capita)
-# Note: Original code used 1960-1972, adjusted based on Table A.1 context if needed,
-# keeping 1960-1972 as per original script here. Adjust range if necessary.
 agg_pet <- df_full %>%
   filter(between(year, 1960, 1972)) %>%
   group_by(county.id) %>%
@@ -69,7 +67,6 @@ cit <- read_csv("data/cities_de.csv") %>%
 
 
 # --- Plotting Function (for binary fill) ---
-# Simplified plot function specifically for the binary treated_median plot
 plot_binary_map <- function(data, fill_var, vname = "", hi_lab = "High", lo_lab = "Low") {
   # Ensure fill variable is factor
   data <- data %>%
@@ -77,21 +74,21 @@ plot_binary_map <- function(data, fill_var, vname = "", hi_lab = "High", lo_lab 
     mutate({{ fill_var }} := as.factor(.data[[fill_var]])) # Use := for dynamic assignment
 
   ggplot(data) +
-    geom_sf(aes(fill = .data[[fill_var]]), size = 0.2, color = "black") + # Reduced line size
+    geom_sf(aes(fill = .data[[fill_var]]), size = 0.2, color = "black") +
     scale_fill_manual(
       values = c("0" = "#fff7bc", "1" = "#d95f0e"), # Assign values based on factor levels (assuming 0/1)
       name = vname,
       labels = c("0" = lo_lab, "1" = hi_lab), # Assign labels based on factor levels
       na.value = "grey80" # Explicit NA color
     ) +
-    geom_point(data = cit, aes(x = lng, y = lat), shape = 21, fill = "white", size = 3) + # Adjusted size
-    geom_text_repel( # Switched to text_repel for potentially better placement
+    geom_point(data = cit, aes(x = lng, y = lat), shape = 21, fill = "white", size = 3) +
+    geom_text_repel(
       data = cit, aes(x = lng, y = lat, label = city),
-      size = 3, # Adjusted size
-      nudge_y = -0.1, # Adjusted nudge
-      min.segment.length = 0.5, # Adjusted segment length
-      point.padding = 0.5, # Added padding
-      box.padding = 0.5 # Added padding
+      size = 3,
+      nudge_y = -0.1,
+      min.segment.length = 0.5,
+      point.padding = 0.5,
+      box.padding = 0.5
     ) +
     theme_map() +
     theme(legend.key.width = unit(0.5, "cm")) # Adjust legend key width
@@ -120,7 +117,7 @@ p_left <- ggplot(shp_left) +
   geom_sf(aes(fill = agg_pet_mean_60_72), size = 0.2, color = "black") +
   scale_fill_gradient(
     low = "#fff7bc", high = "#d95f0e",
-    name = "Avg. Petitions per 1,000 capita\n(1960-1972)", # Updated label for clarity
+    name = "Avg. Petitions per 1,000 capita\n(1960-1972)",
     na.value = "grey80" # Explicit NA color
   ) +
   geom_point(data = cit, aes(x = lng, y = lat), shape = 21, fill = "white", size = 3) + # Match styling
@@ -137,24 +134,25 @@ p_left
 # Figure A4 Right-hand Panel (Continuous % Increase Flats Post-1971)
 # Using direct ggplot call as it uses scale_fill_gradient
 
-# Ensure the fill variable exists and is numeric
-shp_right <- shp %>% filter(!is.na(incr_flats_after71_pct))
-
-p_right <- ggplot(shp_right) +
-  geom_sf(aes(fill = incr_flats_after71_pct), size = 0.2, color = "black") +
-  scale_fill_gradient(
-    low = "#fff7bc", high = "#d95f0e", # Consistent color scale
-    name = "% Increase in flat construction\n(Post-1971 vs Pre-1971)", # Updated label
-    na.value = "grey80", # Explicit NA color
-    labels = scales::percent_format(accuracy = 1) # Format labels as percentages
+p_right <- ggplot(shp) +
+  geom_sf(aes(fill = incr_flats_after71_pct), size = 0.5, color = "black") +
+  scale_fill_distiller(
+    palette = "YlOrBr",
+    direction = 1,
+    na.value = "white",
+    name = "% increase in flat construction\nin 1972-1990 compared to 1945-1971"
   ) +
-  geom_point(data = cit, aes(x = lng, y = lat), shape = 21, fill = "white", size = 3) + # Match styling
-  geom_text_repel( # Match styling
-    data = cit, aes(x = lng, y = lat, label = city),
-    size = 3, nudge_y = -0.1, min.segment.length = 0.5,
-    point.padding = 0.5, box.padding = 0.5
+  geom_point(
+    data = cit, aes(x = lng, y = lat),
+    shape = 21, fill = "white", size = 3.5
   ) +
   theme_map() +
-  theme(legend.key.width = unit(1, "cm")) # Wider key for gradient
+  geom_label_repel(data = cit, aes(x = lng, y = lat, label = city), nudge_y = -0.1, size = 7) +
+  theme(legend.position = "bottom") +
+  guides(fill = guide_colourbar(barwidth = 10, barheight = 1)) +
+  theme(
+    legend.text = element_text(size = 15),
+    legend.title = element_text(size = 15)
+  )
 
 p_right

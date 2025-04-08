@@ -3,7 +3,7 @@ rm(list = ls())
 # Load packages
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
 
-pacman::p_load(tidyverse, lfe, stargazer)
+pacman::p_load(tidyverse, lfe, stargazer, conflicted)
 
 # Resolve conflicts if needed
 conflicts_prefer(dplyr::filter)

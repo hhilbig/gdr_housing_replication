@@ -42,17 +42,17 @@ plot_data <- df_housing %>%
 
 ## Create Plot
 p1 <- ggplot(plot_data, aes(x = protestMun1953_share, y = petitions_housing_pc_per1000)) +
-  geom_point(shape = 21, size = 0.8, alpha = 0.6) + # Added alpha for potential overplotting
+  geom_point(shape = 21, size = 0.8, alpha = 0.6) +
   geom_smooth(method = "lm", se = FALSE, color = "black", linewidth = 0.5) +
   # theme_bw(fontsize = 16) + # Replace with standard theme if theme_bw is not available
   theme_bw(base_size = 16) + # Using theme_bw as standard alternative
   labs(
     y = "Housing petitions\n(per 1,000 capita)",
     x = "1953 protests\n(share of municipalities in county)",
-    title = "Correlation between Housing Petitions and 1953 Protests" # Added title
+    title = "Correlation between Housing Petitions and 1953 Protests"
   ) +
   # Add correlation coefficient (using ggpubr)
-  ggpubr::stat_cor(aes(label = after_stat(r.label)), # Updated label aesthetic for newer ggpubr
+  ggpubr::stat_cor(aes(label = after_stat(r.label)),
     cor.coef.name = "r",
     label.x.npc = 0.05, # Position label
     label.y.npc = 0.95,

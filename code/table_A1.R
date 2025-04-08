@@ -3,7 +3,7 @@ rm(list = ls())
 # Load packages
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
 
-pacman::p_load(dplyr, readr, stringr, tidyr, kableExtra, knitr)
+pacman::p_load(dplyr, readr, stringr, tidyr, kableExtra, knitr, conflicted)
 
 # Resolve conflicts if needed
 conflicts_prefer(dplyr::filter)
@@ -105,7 +105,7 @@ kable(sstats_list,
   ),
   linesep = "", # Remove default lines between rows
   caption = "Table A.1: Summary statistics", # Set caption
-  label = "tab:sumstats_A1", # Set label (updated for specificity)
+  label = "tab:sumstats_A1",
   escape = FALSE, # Don't escape LaTeX characters in labels/notes
   digits = 2, # Set number of decimal places for numeric columns
   align = c("l", "r", "r", "r", "r", "r", "r") # Specify column alignments (left, 6x right, left)

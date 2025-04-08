@@ -5,9 +5,10 @@ rm(list = ls())
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
 
 pacman::p_load(
-  tidyverse, 
-  stargazer, 
-  lfe 
+  tidyverse,
+  stargazer,
+  lfe
+)
 
 
 ## Load results for different residualization types
@@ -68,9 +69,9 @@ stargazer(mlist_3, # Use list of 3 pseudo models
   se = out_71_subset$std.error,
   p = out_71_subset$p.value,
   add.lines = list(
-    c("County FE", "No", "Yes", "Yes"), # Adjusted for 3 models
-    c("Period FE", "No", "Yes", "No"), # Adjusted for 3 models
-    c("Period * district FE", "No", "No", "Yes"), # Adjusted for 3 models
+    c("County FE", "No", "Yes", "Yes"),
+    c("Period FE", "No", "Yes", "No"),
+    c("Period * district FE", "No", "No", "Yes"),
     c("Residualization", rep("Census 1971", 3)), # Only Census 1971
     c("DV mean", round(out_71_subset$dv_mean, 3)),
     c("DV SD", round(out_71_subset$dv_sd, 3)),
@@ -79,7 +80,7 @@ stargazer(mlist_3, # Use list of 3 pseudo models
   ),
   style = "qje",
   dep.var.labels = "\\parbox{6cm}{DV: annual flat construction, per 1,000 capita}",
-  title = "Effect of petitions on flat construction (Census 1971 Residualization)", # Adjusted title
+  title = "Effect of petitions on flat construction (Census 1971 Residualization)",
   label = "tab:reg_main_resid71", # Changed label
   font.size = "small"
 )

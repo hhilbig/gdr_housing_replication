@@ -3,7 +3,7 @@ rm(list = ls())
 
 # Load packages
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
-pacman::p_load(dplyr, readr, ggplot2)
+pacman::p_load(dplyr, readr, ggplot2, conflicted)
 
 # Resolve conflicts if needed
 conflicts_prefer(dplyr::filter)
@@ -57,8 +57,6 @@ ggplot(data.frame(sim_res), aes(x = sim_res)) +
   geom_histogram(binwidth = .0003, col = "black", fill = "grey80") +
   theme_bw() +
   labs(
-    title = "Distribution of Correlation Coefficients",
-    subtitle = "Correlation between mean petitions (all years) and mean petitions (random subset of years)",
     x = "Bivariate correlation coefficient",
     y = "Frequency"
   )

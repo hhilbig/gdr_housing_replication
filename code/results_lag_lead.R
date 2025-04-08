@@ -69,13 +69,7 @@ id_treat <- df %>%
   pull(period) %>%
   unique()
 
-# Modify main loop to use df directly and simplify outcome handling
 out <- pblapply(treatvars, function(tv) {
-  # Remove ss_id and df_ss assignment based on ss_list
-  # ss_id <- 1 # Hardcode ss_id
-  # df_ss <- ss_list[[ss_id]]
-
-  # Use df directly, perhaps copy to avoid modifying original df in loop? (using df_ss convention)
   df_ss <- df
   df_ss$treat_temp <- df_ss %>% pull(!!tv)
 
@@ -96,7 +90,6 @@ out <- pblapply(treatvars, function(tv) {
     id_treat - 1
   ))]
 
-  # Simplify: Remove lapply as outcomevars has only one element
   # results <- lapply(outcomevars, function(dv) {
   dv <- outcomevars[1] # Get the single outcome variable name
   model_formula1 <- as.formula(paste0(
@@ -161,7 +154,7 @@ c("flats71", "births_pc71")
 out_d <- pblapply(treatvars, function(tv) {
   # Remove ss_id and df_ss based on ss_list
   # cat(tv, ss_id, "\n")
-  cat(tv, "\n") # Simplified logging
+  cat(tv, "\n")
 
   # Use df directly
   df_ss <- df
@@ -186,8 +179,6 @@ out_d <- pblapply(treatvars, function(tv) {
     mutate(term = as.numeric(term)) %>%
     mutate(term = term + 7) %>%
     mutate(term = paste0("period_", term)) %>%
-    # Fix outcome assignment: use outcomevars[1] instead of undefined dv
-    # Use ss = "Full" directly instead of ss_labels[ss_id]
     mutate(outcome = outcomevars[1], covars = "Housing stock, births p.c.", ss = "Full")
 
   # Return
@@ -237,7 +228,7 @@ write_rds(out_d, "results/est_lag_lead_demand.rds")
 out_p <- pblapply(treatvars, function(tv) {
   # Remove ss_id and df_ss based on ss_list
   # cat(tv, ss_id, "\n") # ss_id is fixed at 1 from above
-  cat(tv, "\n") # Simplified logging
+  cat(tv, "\n")
 
   # Use df directly
   df_ss <- df
@@ -262,8 +253,6 @@ out_p <- pblapply(treatvars, function(tv) {
     mutate(term = as.numeric(term)) %>%
     mutate(term = term + 7) %>%
     mutate(term = paste0("period_", term)) %>%
-    # Fix outcome assignment: use outcomevars[1] instead of undefined dv
-    # Use ss = "Full" directly instead of ss_labels[ss_id]
     mutate(outcome = outcomevars[1], covars = "SED share 1946", ss = "Full")
 
   # Return

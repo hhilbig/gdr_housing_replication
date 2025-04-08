@@ -203,7 +203,7 @@ p1 <- ggplot(
   # Use model_label for facetting
   facet_grid(model_label ~ ., scales = "free_y", space = "free_y") +
   ylab("Estimated effect on\navg. annual flats constructed / 1,000 capita") +
-  xlab("Omitted administrative district") + # Updated label slightly
+  xlab("Omitted administrative district") +
   theme(
     legend.position = "none", # No legend needed
     axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5), # Rotate x labels

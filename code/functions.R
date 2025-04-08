@@ -5,13 +5,14 @@ rm(list = ls())
 pacman::p_load(broom, fixest)
 
 tidy_feols <- function(model, ...) {
-        if (!is.null(names(model))) {
-            tidy_feols_single(model, ...)
-        } else {
-            lapply(model, function(x) {
-                tidy_feols_single(x, ...)
-            }) %>% reduce(bind_rows)
-        }
+    if (!is.null(names(model))) {
+        tidy_feols_single(model, ...)
+    } else {
+        lapply(model, function(x) {
+            tidy_feols_single(x, ...)
+        }) %>% reduce(bind_rows)
+    }
+}
 
 tidy_feols_single <- function(
     model, add_glance = T, add_dv_stats = T, add_conf_90 = T,
@@ -103,3 +104,5 @@ tidy_feols_single <- function(
         }
     }
 }
+
+haschaR::tidy_felm

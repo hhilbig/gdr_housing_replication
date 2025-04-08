@@ -4,7 +4,8 @@ rm(list = ls())
 # Load packages
 pacman::p_load(
   tidyverse, # For data manipulation (dplyr, readr, etc.) and plotting (ggplot2)
-  lubridate # For date/time manipulation (if needed, check usage)
+  lubridate, # For date/time manipulation (if needed, check usage)
+  conflicted
 )
 
 # --- Load and Prepare Main Dataset ---
@@ -111,9 +112,9 @@ p_fig1 <- ggplot(
   ) +
   annotate("text",
     x = (which(levels(plot_df_fig1$period_proper) == "[1970, 1971]") +
-      which(levels(plot_df_fig1$period_proper) == "[1972, 1973]")) / 2 + 0.1, # Adjusted position slightly
+      which(levels(plot_df_fig1$period_proper) == "[1972, 1973]")) / 2 + 0.1,
     y = Inf, vjust = 1.1, # Position relative to vline
-    label = "Start of the housing program", angle = 90, size = 3.3, hjust = 1 # Use hjust for alignment
+    label = "Start of the housing program", angle = 90, size = 3.3, hjust = 1
   )
 
 print(p_fig1) # Display the plot
@@ -164,7 +165,7 @@ p_figA3 <- ggplot(plot_df_figA3, aes(x = as.numeric(period_proper), y = m, linet
   )) +
   annotate("text",
     x = (which(levels(plot_df_figA3$period_proper) == "[1970, 1971]") +
-      which(levels(plot_df_figA3$period_proper) == "[1972, 1973]")) / 2 - 0.1, # Adjusted position slightly
+      which(levels(plot_df_figA3$period_proper) == "[1972, 1973]")) / 2 - 0.1,
     y = Inf, vjust = -0.1, # Position relative to vline
     label = "Start of the housing program", angle = 90, size = 2.4, hjust = 0
   ) # Use hjust for alignment

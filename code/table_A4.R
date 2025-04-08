@@ -46,7 +46,7 @@ ss_list <- list(
   `Rem outlier` = df %>% filter(!incr_flats_after71_pct > quantile(df$incr_flats_after71_pct, 0.95, na.rm = T))
 )
 
-## --- Simplified Model Estimation ---
+## --- Model Estimation ---
 
 model_list <- list()
 stats_list <- list() # To store stats for add.lines
@@ -131,6 +131,5 @@ stargazer(model_list, # Pass the list of felm objects directly
   notes.align = "l",
   title = "Effect of non-housing petitions on flat construction (placebo)",
   label = "tab:reg_placebo",
-  font.size = "small",
-  out = "13_Replication/05_Tables/table_A4.tex" # Optional: Specify output file
+  font.size = "small"
 )

@@ -4,7 +4,7 @@ rm(list = ls())
 # Load packages
 if (!require("pacman")) install.packages("pacman") # Ensure pacman is available
 
-pacman::p_load(tidyverse, conflicted, relaimpo)
+pacman::p_load(tidyverse, conflicted, relaimpo, conflicted)
 
 # Resolve conflicts if needed
 

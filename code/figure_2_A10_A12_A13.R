@@ -3,7 +3,7 @@ rm(list = ls())
 
 # Load packages
 if (!require(pacman)) install.packages("pacman") # Ensure pacman is available
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, conflicted)
 
 # --- Helper Functions ---
 
@@ -16,7 +16,6 @@ process_results <- function(res_df, dict) {
     year_start = rep(c(1963, 1971), each = 3),
     type = rep(c("Split based\non median", "Split based\non mean", "Continuous"), 2),
     ss = "Full",
-    # Infer outcome from the input df if possible, otherwise use default
     outcome = unique(res_df$outcome)[1] # Takes the first outcome found
   )
 

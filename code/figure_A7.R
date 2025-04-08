@@ -2,7 +2,7 @@
 rm(list = ls())
 
 # Load packages
-pacman::p_load(dplyr, readr, haven, lfe, broom, ggplot2, forcats)
+pacman::p_load(dplyr, readr, haven, lfe, broom, ggplot2, forcats, conflicted)
 
 # Resolve conflicts if needed
 conflicts_prefer(dplyr::filter)
@@ -87,7 +87,6 @@ main_df <- read_rds("data/data_main.rds") %>%
     left_join(covs %>% dplyr::select(AGS, all_of(crabtree_covars)), by = "AGS")
 
 ## Define covariates to keep from main DF
-# No changes needed here, variable lists are clear
 covar_list <- c(
     "pop_1969",
     "critInd_any",

@@ -9,6 +9,62 @@ pacman::p_load(tidyverse, pbapply, lfe, broom)
 df <- read_rds("data/data_main.rds") %>%
   filter(year > 1960)
 
+# Function to tidy felm objects
+
+tidy_felm <- function(model, add_glance = T, add_dv_stats = T, add_conf_90 = T) {
+  n <- sum(!is.na(model$residuals))
+  m_tidy <- broom::tidy(model, conf.int = T)
+  out <- m_tidy %>% mutate(n = n)
+  if (add_conf_90) {
+    out <- out %>% mutate(conf.low90 = estimate - qnorm(0.95) *
+      std.error, conf.high90 = estimate + qnorm(0.95) *
+      std.error)
+  }
+  dv <- model$formula %>%
+    as.character() %>%
+    str_split(" ~ ",
+      simplify = T
+    ) %>%
+    .[2]
+  dv_mean <- model %>%
+    augment() %>%
+    pull(!!dv) %>%
+    mean(na.rm = T)
+  dv_sd <- model %>%
+    augment() %>%
+    pull(!!dv) %>%
+    sd(na.rm = T)
+  dv_min <- model %>%
+    augment() %>%
+    pull(!!dv) %>%
+    min(na.rm = T)
+  dv_max <- model %>%
+    augment() %>%
+    pull(!!dv) %>%
+    max(na.rm = T)
+  if (add_dv_stats) {
+    out <- out %>% mutate(
+      dv_mean = dv_mean, dv_sd = dv_sd,
+      dv_min = dv_min, dv_max = dv_max
+    )
+  }
+  if (add_glance) {
+    g <- model %>%
+      glance() %>%
+      dplyr::rename(
+        f_stat = statistic,
+        f_pval = p.value
+      ) %>%
+      dplyr::select(matches("squared|f_"))
+    out <- out %>% mutate(
+      rsq = g$r.squared, a_rsq = g$adj.r.squared,
+      f_stat = g$f_stat, f_pval = g$f_pval
+    )
+    out
+  } else {
+    out
+  }
+}
 
 ## Define treatment variables
 
